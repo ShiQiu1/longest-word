@@ -1,5 +1,6 @@
 import random
 import string
+import requests
 
 class Game:
     def __init__(self) -> list:
@@ -12,10 +13,24 @@ class Game:
         if not word:
             return False
         letters = self.grid.copy()
+
         """Make sure the input word does not have words outside the grid"""
+
         for letter in word:
             if letter in letters:
                 letters.remove(letter)
             else:
                 return False
-        return True
+
+
+        base_dict_url = "https://dictionary.lewagon.com/"
+        full_dict_url = base_dict_url + word
+
+        try:
+            response = requests.get(full_dict_url)
+            response.raise_for_status()
+            word_data = response.json()
+            return word_data['found']
+        except requests.exceptions.RequestException as e:
+            print(f"Error fetching data: {e}")
+            return None
