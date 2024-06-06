@@ -21,3 +21,9 @@ class TestGame:
         assert new_game.grid == list(test_grid), "Make sure the grid does not get modified"
         assert new_game.is_valid(test_failed_word) == False, "This word is not the longest"
         assert new_game.is_valid("") == False, "Empty word is not allowed"
+
+    def test_unknown_word_is_invalid(self):
+        """A word that is not in the English dictionary should not be valid"""
+        new_game = Game()
+        new_game.grid = list('KWIENFUQW') # Force the grid to a test case:
+        assert new_game.is_valid('FEUN') is False
